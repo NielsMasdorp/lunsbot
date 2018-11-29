@@ -42,7 +42,7 @@ More information on the arguments can be found with:
 `python slack-lunsbot.py -h`
 
 ### Finally
-Add lunsbot to one of your channels in slack and activate by typing `@lunsbot zoek luns`
+Add lunsbot to one of your channels in slack and activate by typing `@lunsbot search`
 
 License
 ====
