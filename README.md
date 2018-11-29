@@ -9,11 +9,10 @@ Slack bot that decides where to eat for lunch.
 - Create an Slack app @ https://api.slack.com/apps?new_app=1 and add it to your workspace.
 - Create a bot user with your desired name (this bot will be the access point of the application).
 - Go to "Install App" under "Settings" and export the Bot user OAuth token to your environment
+```
+export SLACK_LUNSBOT_API_KEY='bot oauth token'
+```
 - Retrieve the ID of the bot @ https://api.slack.com/methods/bots.info and remember it, you need it to initialise the script
-
-```
-export SLACK_LUNSBOT_API_KEY='key'
-```
 
 ### Foursquare configuration
 - Create an app @ https://foursquare.com/developers/apps and retrieve your client id and client secret to authenticate the API
