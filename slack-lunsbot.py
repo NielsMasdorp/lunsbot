@@ -45,17 +45,17 @@ GOOGLE_MAPS_STATIC_MAPS_URL = 'http://maps.googleapis.com/maps/api/staticmap?cen
 
 def handle_command(command, channel):
     if command == searchCommand:
-        sendMessageToChat(message='Searching for popular venue within {0} meters'.format(
+        send_message_to_chat(message='Searching for popular venue within {0} meters'.format(
             radius), channel=channel)
-        venues = exploreVenues()
+        venues = explore_venues()
         if len(venues) == 0:
-            sendMessageToChat(
+            send_message_to_chat(
                 message='No venues found, you\'ll be starving today..', channel=channel)
         else:
             randomVenue = random.choice(venues)
             distanceToVenue = randomVenue.get(
                 'venue').get('location').get('distance')
-            selectedVenue = getVenueDetails(
+            selectedVenue = get_venue_details(
                 venueId=randomVenue.get('venue').get('id'))
             lat = selectedVenue.get('location').get('lat')
             lng = selectedVenue.get('location').get('lng')
@@ -64,35 +64,35 @@ def handle_command(command, channel):
                 'rating') if selectedVenue.get('rating') else 'unknown'
             venueName = selectedVenue.get('name')
             venueUrl = selectedVenue.get('canonicalUrl')
-            sendMessageToChat(message='I have found a spot named: {0}, at {1} meter walking distance. \n\n Avarage rating: {2}. Link: {3}'.format(
+            send_message_to_chat(message='I have found a spot named: {0}, at {1} meter walking distance. \n\n Avarage rating: {2}. Link: {3}'.format(
                 venueName, distanceToVenue, venueRating, venueUrl), channel=channel)
             if lat and lng:
                 mapUrl = GOOGLE_MAPS_STATIC_MAPS_URL.format(
                     venueLatLng, venueLatLng, MAPS_KEY)
-                sendAttachmentToChat(
+                send_attachment_to_chat(
                     attachments=[{"title": "Location on map", "image_url": mapUrl}])
     else:
-        sendMessageToChat(
+        send_message_to_chat(
             message='Use \"@lunsbot search\" to search for spots', channel=channel)
 
 # Send a message to a channel as the bot
 
 
-def sendMessageToChat(message, channel):
+def send_message_to_chat(message, channel):
 	slack_client.api_call("chat.postMessage",
 						channel=channel, text=message, as_user=True)
 
 # Send attachment to a channel as the bot
 
 
-def sendAttachmentToChat(attachments):
+def send_attachment_to_chat(attachments):
 	slack_client.api_call("chat.postMessage", channel=channel,
 						text='', attachments=attachments, as_user=True)
 
 # Return recommended venues nearby
 
 
-def exploreVenues():
+def explore_venues():
 	venueRequest = requests.get(FOURSQUARE_EXPLORE_URL.format(
 		FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET, location, radius))
 	return venueRequest.json().get('response').get('groups')[0].get('items')
@@ -100,7 +100,7 @@ def exploreVenues():
 # Return the details of a venue with a provided id
 
 
-def getVenueDetails(venueId):
+def get_venue_details(venueId):
 	detailsRequest = requests.get(FOURSQUARE_DETAILS_URL.format(
 		venueId, FOURSQUARE_CLIENT_ID, FOURSQUARE_CLIENT_SECRET))
 	return detailsRequest.json().get('response').get('venue')
